@@ -54,5 +54,3 @@ To explore more about the underlying technology and associated projects, visit t
 
 - For insights into the `noir_rs` library, which forms the backbone of `noir_java`: [noir_rs README](https://github.com/visoftsolutions/aztec-packages/tree/0.16.1/noir/tooling/noir_rs/README.md).
 - To understand the broader scope and capabilities of the Noir project: [Noir Project Overview](https://github.com/visoftsolutions/aztec-packages/blob/0.16.1/noir/README.md).
-
-`noir_java` invites Java developers to harness the power of zkSNARKs, supported by the robust and efficient `noir_rs` library, enhancing privacy and scalability in computing applications.
