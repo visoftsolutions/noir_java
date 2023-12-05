@@ -23,6 +23,8 @@ dependencies {
 
     // This dependency is used by the application.
     implementation(libs.guava)
+
+    implementation("org.json:json")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -43,22 +45,17 @@ tasks.named<Test>("test") {
     useJUnitPlatform()
 }
 
-val rustLibName = "rustlib" // Adjust based on your library name
+val rustLibName = "noir_java" // Adjust based on your library name
 val rustLibPath = "src/main/$rustLibName" // Adjust based on your library name
 
-tasks.register("buildRustDebug", Exec::class) {
-    workingDir(file("$rustLibPath"))
-    commandLine("cargo", "build")
-}
-
-tasks.register("buildRustRelease", Exec::class) {
+tasks.register("buildRust", Exec::class) {
     workingDir(file("$rustLibPath"))
     commandLine("cargo", "build", "--release")
 }
 
-tasks.register("buildRust") {
-    // dependsOn("buildRustDebug")
-    dependsOn("buildRustRelease")
+tasks.register("buildNargo", Exec::class) {
+    workingDir(file("$rustLibPath"))
+    commandLine("nargo", "compile")
 }
 
 tasks.register("copyRustLib", Copy::class) {
@@ -67,10 +64,16 @@ tasks.register("copyRustLib", Copy::class) {
     into("src/main/resources")
 }
 
+tasks.register("copyNargoBytecode", Copy::class) {
+    val targetDir = "${rustLibName}.json"
+    from("$rustLibPath/target/$targetDir")
+    into("src/main/resources")
+}
+
 tasks.named<ProcessResources>("processResources") {
-    dependsOn("copyRustLib")
+    dependsOn("copyRustLib", "copyNargoBytecode")
 }
 
 tasks.named("build") {
-    dependsOn("buildRust", "copyRustLib")
+    dependsOn("buildRust", "buildNargo", "copyRustLib", "copyNargoBytecode")
 }
