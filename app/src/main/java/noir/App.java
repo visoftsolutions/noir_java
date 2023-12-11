@@ -27,7 +27,7 @@ public class App {
 
         System.out.println("Verifying proof...");
         boolean verdict = Noir.verify(CIRCUIT_BYTECODE, proof);
-        
+
         assert verdict;
         System.out.println("Proof correct");
     }
