@@ -1,41 +1,127 @@
-// This is the interface to the JVM that we'll call the majority of our
-// methods on.
+use jni::objects::{JClass, JObject, JString};
+use jni::sys::{jboolean, jobject};
 use jni::JNIEnv;
+use noir_rs::native_types::{Witness, WitnessMap};
+use noir_rs::FieldElement;
 
-// These objects are what you should use as arguments to your native
-// function. They carry extra lifetime information to prevent them escaping
-// this context and getting used after being GC'd.
-use jni::objects::{JClass, JString};
-
-// This is just a pointer. We'll be returning it from our function. We
-// can't return one of the objects with lifetime information because the
-// lifetime checker won't let us.
-use jni::sys::jstring;
-
-// This keeps Rust from "mangling" the name and making it unique for this
-// crate.
 #[no_mangle]
-pub extern "system" fn Java_noir_App_hello<'local>(
+pub extern "system" fn Java_noir_Noir_prove<'local>(
     mut env: JNIEnv<'local>,
-    // This is the class that owns our static method. It's not going to be used,
-    // but still must be present to match the expected signature of a static
-    // native method.
     _class: JClass<'local>,
-    input: JString<'local>,
-) -> jstring {
-    // First, we have to get the string out of Java. Check out the `strings`
-    // module for more info on how this works.
-    let input: String = env
-        .get_string(&input)
-        .expect("Couldn't get java string!")
-        .into();
+    circuit_bytecode_jstr: JString<'local>,
+    witness_jobject: JObject<'local>,
+) -> jobject {
+    // Use more descriptive variable names and handle errors gracefully
+    let witness_map = match env.get_map(&witness_jobject) {
+        Ok(map) => map,
+        Err(e) => panic!("Failed to get witness map: {:?}", e),
+    };
+    let mut witness_iter = witness_map
+        .iter(&mut env)
+        .expect("Failed to create iterator");
 
-    // Then we have to create a new Java string to return. Again, more info
-    // in the `strings` module.
-    let output = env
-        .new_string(format!("Hello, {}!", input))
-        .expect("Couldn't create java string!");
+    let circuit_bytecode = env
+        .get_string(&circuit_bytecode_jstr)
+        .expect("Failed to get string from JString")
+        .to_str()
+        .expect("Failed to convert Java string to Rust string")
+        .to_owned();
 
-    // Finally, extract the raw pointer to return.
-    output.into_raw()
+    let mut witness_map = WitnessMap::new();
+
+    while let Ok(Some((key, value))) = witness_iter.next(&mut env) {
+        let key_str = key.into();
+        let value_str = value.into();
+
+        let key_jstr = env.get_string(&key_str).expect("Failed to get key string");
+        let value_jstr = env
+            .get_string(&value_str)
+            .expect("Failed to get value string");
+
+        let key = key_jstr
+            .to_str()
+            .expect("Failed to convert key to Rust string");
+        let value = value_jstr
+            .to_str()
+            .expect("Failed to convert value to Rust string");
+
+        witness_map.insert(
+            Witness(key.parse().expect("Failed to parse key")),
+            FieldElement::from_hex(value).expect("Failed to parse value"),
+        );
+    }
+
+    let (proof, vk) =
+        noir_rs::prove(circuit_bytecode, witness_map).expect("Proof generation failed");
+
+    let proof_str = hex::encode(proof);
+    let vk_str = hex::encode(vk);
+
+    let proof_jstr = env
+        .new_string(proof_str)
+        .expect("Failed to create Java string for proof");
+    let vk_jstr = env
+        .new_string(vk_str)
+        .expect("Failed to create Java string for vk");
+
+    let proof_class = env
+        .find_class("noir/Proof")
+        .expect("Failed to find Proof class");
+    env.new_object(
+        proof_class,
+        "(Ljava/lang/String;Ljava/lang/String;)V",
+        &[(&proof_jstr).into(), (&vk_jstr).into()],
+    )
+    .expect("Failed to create new Proof object")
+    .as_raw()
+}
+
+#[no_mangle]
+pub extern "system" fn Java_noir_Noir_verify<'local>(
+    mut env: JNIEnv<'local>,
+    _class: JClass<'local>,
+    circuit_bytecode_jstr: JString<'local>,
+    mut proof_jobject: JObject<'local>,
+) -> jboolean {
+    let circuit_bytecode = env
+        .get_string(&circuit_bytecode_jstr)
+        .expect("Failed to get string from JString")
+        .to_str()
+        .expect("Failed to convert Java string to Rust string")
+        .to_owned();
+
+    let proof_field = env
+        .get_field(&mut proof_jobject, "proof", "Ljava/lang/String;")
+        .expect("Failed to get proof field")
+        .l()
+        .expect("Failed to get proof object");
+    let proof_str: JString = proof_field.into();
+    let proof_jstr = env
+        .get_string(&proof_str)
+        .expect("Failed to get string from JString");
+    let proof_str = proof_jstr
+        .to_str()
+        .expect("Failed to convert Java string to Rust string");
+
+    let vk_field = env
+        .get_field(&mut proof_jobject, "vk", "Ljava/lang/String;")
+        .expect("Failed to get vk field")
+        .l()
+        .expect("Failed to get vk object");
+
+    let vk_str: JString = vk_field.into();
+    let vk_jstr = env
+        .get_string(&vk_str)
+        .expect("Failed to get string from JString");
+    let vk_str = vk_jstr
+        .to_str()
+        .expect("Failed to convert Java string to Rust string");
+
+    let proof = hex::decode(proof_str).expect("Failed to decode proof");
+    let verification_key = hex::decode(vk_str).expect("Failed to decode verification key");
+
+    let verdict =
+        noir_rs::verify(circuit_bytecode, proof, verification_key).expect("Verification failed");
+
+    jboolean::from(verdict)
 }

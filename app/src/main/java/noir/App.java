@@ -3,11 +3,9 @@
  */
 package noir;
 
+import java.util.HashMap;
+
 public class App {
-    // This declares that the static `hello` method will be provided
-    // a native library.
-    private static native String hello(String input);
-    
     static {
         // This actually loads the shared object that we'll be creating.
         // The actual location of the .so or .dll may differ based on your
@@ -17,7 +15,20 @@ public class App {
 
     // The rest is just regular ol' Java!
     public static void main(String[] args) {
-        String output = App.hello("josh");
-        System.out.println(output);
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put("1", "0x2f");
+        map.put("2", "0x02");
+
+        System.out.println("Generating proof...");
+        Proof proof = Noir.prove(
+                "H4sIAAAAAAAA/+1Y207DMAz1Mna/sCGQEDww9gV127TpG7/Sdt1n8yuwomTLSgYSPZmGwNKUas1O7ONL7D0S0RMdpKPXF70G7YTFDkM4cKMgieMqDSuOOA/CrFAyiGWRKFYsldyEKooqFas0K7I0yDiOKt7KLNpq4C5Oxw8sQZ8FzUUHqLND3bbYbB5sLq702tMfw4uw3r85OOtYz0LvEV/s6ZzAGVnfmd/Prfco4/ckGONqw14tY2vjV40zux7ONlg/TJBQJwhfES7ZeuQncAWYP6TNfQdWEZQbyUWySbnKpSrLLGIO8yRPilBtq0KykmqHWeah2h0X5iVXQZ5UXXIELOELTB+HFdj6DuhQCIQj/vsebKHGOU3+vBYBX84ZeMAdEi7ofdk9xPvIqSui0A094N6QnwKKuoCMnshYGgFjCMmfudBr/Z41h3ZRA8d/bPDBuKkgP8WWMHo6u8mxXif0x7rJ2nC7m6wJWDWUA50Z1/hdwhexW7rsIqblKDHadtFjIH93Z+KvrZ4TYPwDY4aB/B0VPPQUgoyZKf2+KWRK2MvayIz+pxCIc2YecOd02VPIVDsL7CMvU8ikEVgo3Hu67Avc6ImMpWtgDCH5M41grZ9rCjEiwDEA/CuPAY3CfkpwmO5lAlnodUmnJ5C1tf/UBLKm7ycQF87ZJxD7cBTmQhOJLlALwidY7ehVg1t0x+wrqdrq9UDnKfhtp6wF0OYl0BcA/pwFzkc+ovg7VfCa8g4KyrarOR4AAA==",
+                map);
+
+        System.out.println("Verifying proof...");
+        boolean verdict = Noir.verify(
+                "H4sIAAAAAAAA/+1Y207DMAz1Mna/sCGQEDww9gV127TpG7/Sdt1n8yuwomTLSgYSPZmGwNKUas1O7ONL7D0S0RMdpKPXF70G7YTFDkM4cKMgieMqDSuOOA/CrFAyiGWRKFYsldyEKooqFas0K7I0yDiOKt7KLNpq4C5Oxw8sQZ8FzUUHqLND3bbYbB5sLq702tMfw4uw3r85OOtYz0LvEV/s6ZzAGVnfmd/Prfco4/ckGONqw14tY2vjV40zux7ONlg/TJBQJwhfES7ZeuQncAWYP6TNfQdWEZQbyUWySbnKpSrLLGIO8yRPilBtq0KykmqHWeah2h0X5iVXQZ5UXXIELOELTB+HFdj6DuhQCIQj/vsebKHGOU3+vBYBX84ZeMAdEi7ofdk9xPvIqSui0A094N6QnwKKuoCMnshYGgFjCMmfudBr/Z41h3ZRA8d/bPDBuKkgP8WWMHo6u8mxXif0x7rJ2nC7m6wJWDWUA50Z1/hdwhexW7rsIqblKDHadtFjIH93Z+KvrZ4TYPwDY4aB/B0VPPQUgoyZKf2+KWRK2MvayIz+pxCIc2YecOd02VPIVDsL7CMvU8ikEVgo3Hu67Avc6ImMpWtgDCH5M41grZ9rCjEiwDEA/CuPAY3CfkpwmO5lAlnodUmnJ5C1tf/UBLKm7ycQF87ZJxD7cBTmQhOJLlALwidY7ehVg1t0x+wrqdrq9UDnKfhtp6wF0OYl0BcA/pwFzkc+ovg7VfCa8g4KyrarOR4AAA==",
+                proof);
+
+        System.out.println(verdict);
     }
 }

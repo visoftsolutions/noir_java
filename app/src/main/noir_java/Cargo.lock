@@ -4,8 +4,8 @@ version = 3
 
 [[package]]
 name = "acir"
-version = "0.34.0"
-source = "git+https://github.com/visoftsolutions/aztec-packages.git?branch=0.16.1#b84532ed8a25efa7d893ee54d63981fcf7e38610"
+version = "0.35.0"
+source = "git+https://github.com/visoftsolutions/noir_rs.git?branch=latest#44465a7ff393f2fbdff46096313be991809e8f61"
 dependencies = [
  "acir_field",
  "base64",
@@ -18,8 +18,8 @@ dependencies = [
 
 [[package]]
 name = "acir_field"
-version = "0.34.0"
-source = "git+https://github.com/visoftsolutions/aztec-packages.git?branch=0.16.1#b84532ed8a25efa7d893ee54d63981fcf7e38610"
+version = "0.35.0"
+source = "git+https://github.com/visoftsolutions/noir_rs.git?branch=latest#44465a7ff393f2fbdff46096313be991809e8f61"
 dependencies = [
  "ark-bn254",
  "ark-ff",
@@ -32,8 +32,8 @@ dependencies = [
 
 [[package]]
 name = "acvm"
-version = "0.34.0"
-source = "git+https://github.com/visoftsolutions/aztec-packages.git?branch=0.16.1#b84532ed8a25efa7d893ee54d63981fcf7e38610"
+version = "0.35.0"
+source = "git+https://github.com/visoftsolutions/noir_rs.git?branch=latest#44465a7ff393f2fbdff46096313be991809e8f61"
 dependencies = [
  "acir",
  "acvm_blackbox_solver",
@@ -47,8 +47,8 @@ dependencies = [
 
 [[package]]
 name = "acvm_blackbox_solver"
-version = "0.34.0"
-source = "git+https://github.com/visoftsolutions/aztec-packages.git?branch=0.16.1#b84532ed8a25efa7d893ee54d63981fcf7e38610"
+version = "0.35.0"
+source = "git+https://github.com/visoftsolutions/noir_rs.git?branch=latest#44465a7ff393f2fbdff46096313be991809e8f61"
 dependencies = [
  "acir",
  "blake2",
@@ -61,8 +61,8 @@ dependencies = [
 
 [[package]]
 name = "acvm_stdlib"
-version = "0.34.0"
-source = "git+https://github.com/visoftsolutions/aztec-packages.git?branch=0.16.1#b84532ed8a25efa7d893ee54d63981fcf7e38610"
+version = "0.35.0"
+source = "git+https://github.com/visoftsolutions/noir_rs.git?branch=latest#44465a7ff393f2fbdff46096313be991809e8f61"
 dependencies = [
  "acir",
 ]
@@ -323,8 +323,8 @@ dependencies = [
 
 [[package]]
 name = "brillig"
-version = "0.34.0"
-source = "git+https://github.com/visoftsolutions/aztec-packages.git?branch=0.16.1#b84532ed8a25efa7d893ee54d63981fcf7e38610"
+version = "0.35.0"
+source = "git+https://github.com/visoftsolutions/noir_rs.git?branch=latest#44465a7ff393f2fbdff46096313be991809e8f61"
 dependencies = [
  "acir_field",
  "serde",
@@ -332,8 +332,8 @@ dependencies = [
 
 [[package]]
 name = "brillig_vm"
-version = "0.34.0"
-source = "git+https://github.com/visoftsolutions/aztec-packages.git?branch=0.16.1#b84532ed8a25efa7d893ee54d63981fcf7e38610"
+version = "0.35.0"
+source = "git+https://github.com/visoftsolutions/noir_rs.git?branch=latest#44465a7ff393f2fbdff46096313be991809e8f61"
 dependencies = [
  "acir",
  "acvm_blackbox_solver",
@@ -1062,6 +1062,7 @@ dependencies = [
 name = "noir_java"
 version = "0.1.0"
 dependencies = [
+ "hex",
  "jni",
  "noir_rs",
  "serde",
@@ -1070,8 +1071,8 @@ dependencies = [
 
 [[package]]
 name = "noir_rs"
-version = "0.19.3"
-source = "git+https://github.com/visoftsolutions/aztec-packages.git?branch=0.16.1#b84532ed8a25efa7d893ee54d63981fcf7e38610"
+version = "0.19.4"
+source = "git+https://github.com/visoftsolutions/noir_rs.git?branch=latest#44465a7ff393f2fbdff46096313be991809e8f61"
 dependencies = [
  "acir",
  "acvm",
@@ -1089,8 +1090,8 @@ dependencies = [
 
 [[package]]
 name = "noir_rs_acir_composer"
-version = "0.19.3"
-source = "git+https://github.com/visoftsolutions/aztec-packages.git?branch=0.16.1#b84532ed8a25efa7d893ee54d63981fcf7e38610"
+version = "0.19.4"
+source = "git+https://github.com/visoftsolutions/noir_rs.git?branch=latest#44465a7ff393f2fbdff46096313be991809e8f61"
 dependencies = [
  "noir_rs_barretenberg",
  "thiserror",
@@ -1098,8 +1099,8 @@ dependencies = [
 
 [[package]]
 name = "noir_rs_acvm_runtime"
-version = "0.19.3"
-source = "git+https://github.com/visoftsolutions/aztec-packages.git?branch=0.16.1#b84532ed8a25efa7d893ee54d63981fcf7e38610"
+version = "0.19.4"
+source = "git+https://github.com/visoftsolutions/noir_rs.git?branch=latest#44465a7ff393f2fbdff46096313be991809e8f61"
 dependencies = [
  "acvm",
  "noir_rs_acir_composer",
@@ -1110,8 +1111,8 @@ dependencies = [
 
 [[package]]
 name = "noir_rs_barretenberg"
-version = "0.19.3"
-source = "git+https://github.com/visoftsolutions/aztec-packages.git?branch=0.16.1#b84532ed8a25efa7d893ee54d63981fcf7e38610"
+version = "0.19.4"
+source = "git+https://github.com/visoftsolutions/noir_rs.git?branch=latest#44465a7ff393f2fbdff46096313be991809e8f61"
 dependencies = [
  "base64",
  "bindgen",
@@ -1124,8 +1125,8 @@ dependencies = [
 
 [[package]]
 name = "noir_rs_blackbox_solver"
-version = "0.19.3"
-source = "git+https://github.com/visoftsolutions/aztec-packages.git?branch=0.16.1#b84532ed8a25efa7d893ee54d63981fcf7e38610"
+version = "0.19.4"
+source = "git+https://github.com/visoftsolutions/noir_rs.git?branch=latest#44465a7ff393f2fbdff46096313be991809e8f61"
 dependencies = [
  "acir",
  "acvm",
