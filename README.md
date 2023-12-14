@@ -2,7 +2,7 @@
 
 Welcome to `noir_java`, a Java-focused package that offers a powerful and streamlined interface for generating and verifying Noir zkSNARK proofs. This package is specifically tailored for Android and Java environments.
 
-- ![Version](https://img.shields.io/badge/version-0.16.7-darkviolet)
+- ![Version](https://img.shields.io/badge/version-0.19.4-darkviolet)
 
 ## Key Highlights:
 
