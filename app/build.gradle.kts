@@ -35,7 +35,7 @@ java {
 application {
     // Define the main class for the application.
     mainClass.set("noir.App")
-    applicationDefaultJvmArgs = listOf("-Djava.library.path=${projectDir}/src/main/resources")
+    applicationDefaultJvmArgs = listOf("-Djava.library.path=${projectDir}/src/main/noir_java/target/release")
 }
 
 tasks.named<Test>("test") {
@@ -56,12 +56,6 @@ tasks.register("buildNargo", Exec::class) {
     commandLine("nargo", "compile")
 }
 
-tasks.register("copyRustLib", Copy::class) {
-    val targetDir = "release/lib${rustLibName}.so"
-    from("$rustLibPath/target/$targetDir")
-    into("src/main/resources")
-}
-
 tasks.register("copyNargoBytecode", Copy::class) {
     val targetDir = "${rustLibName}.json"
     from("$rustLibPath/target/$targetDir")
@@ -69,9 +63,9 @@ tasks.register("copyNargoBytecode", Copy::class) {
 }
 
 tasks.named<ProcessResources>("processResources") {
-    dependsOn("copyRustLib", "copyNargoBytecode")
+    dependsOn("copyNargoBytecode")
 }
 
 tasks.named("build") {
-    dependsOn("buildRust", "buildNargo", "copyRustLib", "copyNargoBytecode")
+    dependsOn("buildRust", "buildNargo", "copyNargoBytecode")
 }
