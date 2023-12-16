@@ -1,4 +1,4 @@
-# `noir_java`: Java Implementation of the Noir zkSNARK Proving Scheme
+# `noir_java`: Java-based zkSNARK Proving&Verifying tool for noir-lang
 
 Welcome to `noir_java`, a Java-focused package that offers a powerful and streamlined interface for generating and verifying Noir zkSNARK proofs. This package is specifically tailored for Android and Java environments.
 
